@@ -107,9 +107,9 @@ while (true)
     Console.Write("2 -> "); int row2 = Convert.ToInt16(Console.ReadLine());
 
     ExchangeStrArray(mayArray, row1 - 1, row2 - 1);
-    Console.WriteLine("");
+    Console.WriteLine();
     Show2dArray(mayArray, $"Результат замены строки {row1} и строки {row2} местами:");
-    Console.WriteLine("");
+    Console.WriteLine();
 }
 // *** Конец Задачи ... ***
 
@@ -154,7 +154,7 @@ while (true)
 
     TranspositionArray(mayArray2);
     Show2dArray(mayArray2, $"Результат транспонирования массива:");
-    Console.WriteLine("");
+    Console.WriteLine();
 }
 // *** Конец Задачи 2 ***
 
@@ -215,7 +215,7 @@ while (true)
     mayArray3 = DeleteRowColArray(mayArray3);
     Show2dArray(mayArray3,
                 $"Результат удаления строки и колонки с наименьшим элементом:");
-    Console.WriteLine("");
+    Console.WriteLine();
 }
 
 // *** Конец Задачи 3 ***
