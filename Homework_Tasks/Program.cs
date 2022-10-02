@@ -201,8 +201,8 @@ int FindRowMinArray(dynamic[,] arr)
         return summ;
     }
 
-    int minRow = 0; var sumRow = SummRowArray(arr, 0); var minSum = sumRow;
-    for (int i = 0; i < arr.GetLength(0); i++)
+    int minRow = 1; var sumRow = SummRowArray(arr, 0); var minSum = sumRow;
+    for (int i = 1; i < arr.GetLength(0); i++)
     {
         sumRow = SummRowArray(arr, i);
         if (sumRow < minSum)
@@ -357,24 +357,18 @@ while (true)
     int row = 0; int col = 0; int order = 1;
     int sizeRow = spiralArray.GetLength(0);
     int sizeCol = spiralArray.GetLength(1);
-    // отступы от краев при заполнении прямоугольников спирали
-    int indentRow_up = 0; int indentRow_dn = 0; int indentCol_l = 0; int indentCol_r = 0;
+    int indent = 0;                         // отступы от краев при заполнении прямоугольников спирали
 
     while (order <= sizeRow*sizeCol)
     {
        spiralArray[row, col] = order;
-       if       (row == indentRow_up               & col < sizeCol - indentCol_r - 1)   ++col;
-       else if  (col == sizeCol - indentCol_r - 1  & row < sizeRow - indentRow_dn - 1)  ++row;
-       else if  (row == sizeRow - indentRow_dn - 1 & col > indentCol_l)                 --col;
-       else                                                                             --row;
+       if       (row == indent               & col < sizeCol - indent - 1)  ++col;
+       else if  (col == sizeCol - indent - 1 & row < sizeRow - indent - 1)  ++row;
+       else if  (row == sizeRow - indent - 1 & col > indent)                --col;
+       else                                                                 --row;
 
-       if (row == indentRow_up + 1 & col == indentCol_l & indentCol_l != sizeCol - indentCol_r - 1)
-       {
-            ++indentRow_up; 
-            ++indentRow_dn; 
-            ++indentCol_l; 
-            ++indentCol_r;
-       }
+       if (row == indent + 1 & col == indent & 2*indent != sizeCol - 1) ++indent; 
+
        ++order;
     }
 
