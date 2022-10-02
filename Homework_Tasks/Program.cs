@@ -352,66 +352,31 @@ while (true)
     if (CheckExit(Convert.ToInt16(Console.ReadLine()))) break;
 
     Console.WriteLine("Задайте размер массива ---------");
-    dynamic[,] spiralArray = CreatRandom2DArray(fill: false, zero: true);
-    Show2dArray(spiralArray, "Исходный массив:");
+    dynamic[,] spiralArray = CreatRandom2DArray(fill: false);
 
     int row = 0; int col = 0; int order = 1;
     int sizeRow = spiralArray.GetLength(0);
     int sizeCol = spiralArray.GetLength(1);
     // отступы от краев при заполнении прямоугольников спирали
-    int indentRowUp = 0; int indentRowDn = 0; int indentColL = 0; int indentColR = 0;
+    int indentRow_up = 0; int indentRow_dn = 0; int indentCol_l = 0; int indentCol_r = 0;
+
     while (order <= sizeRow*sizeCol)
     {
-      Console.Write($"order -> {order}. row -> {row}, col -> {col}\n");
-      Console.Write($"indentRowUp -> {indentRowUp}. indentRowDn -> {indentRowDn}\n");
-      Console.Write($"indentColL -> {indentColL}. indentRowDn -> {indentColR}\n");
-
        spiralArray[row, col] = order;
-       Show2dArray(spiralArray, "--------------");
+       if       (row == indentRow_up               & col < sizeCol - indentCol_r - 1)   ++col;
+       else if  (col == sizeCol - indentCol_r - 1  & row < sizeRow - indentRow_dn - 1)  ++row;
+       else if  (row == sizeRow - indentRow_dn - 1 & col > indentCol_l)                 --col;
+       else                                                                             --row;
 
-       if       (row == indentRowUp               & col < sizeCol - indentColR)     ++col;
-       else if  (col == sizeCol - indentColR - 1  & row < sizeRow - indentRowDn)    ++row;
-       else if  (row == sizeRow - indentRowDn - 1 & col > indentColL)               --col;
-       else                                                                         --row;
-
-       if (row == indentRowUp+1 & col == indentColL & indentColL != sizeCol - indentColR - 1)
-            ++indentRowUp; 
-            ++indentRowDn; 
-            ++indentColL; 
-            ++indentColR;
-
+       if (row == indentRow_up + 1 & col == indentCol_l & indentCol_l != sizeCol - indentCol_r - 1)
+       {
+            ++indentRow_up; 
+            ++indentRow_dn; 
+            ++indentCol_l; 
+            ++indentCol_r;
+       }
        ++order;
- 
-        // if (col + 1 < sizeCol & spiralArray[row, Math.Min(sizeCol - 1, col + 1)] == 0)
-        // {
-        //     ++col;
-        //     spiralArray[row, col] = order;
-// 
-        //     Console.Write($"order -> {order}. I: row -> {row}, col -> {col}\n");
-        //     Show2dArray(spiralArray, "col+1 < sizeCol:");
-        // }
-// 
-        // if (row + 1 < sizeRow & spiralArray[Math.Min(sizeRow - 1, row + 1), col] == 0)
-        // {
-        //     ++row;
-        //     spiralArray[row, col] = order;
-        //     Console.Write($"order -> {order}. II: row -> {row}, col -> {col}\n");
-        // }
-        // else if (col - 1 >= 0 & spiralArray[row, Math.Max(0, col - 1)] == 0)
-        // {
-        //     --col;
-        //     spiralArray[row, col] = order;
-        //     Console.Write($"order -> {order}. III: row -> {row}, col -> {col}\n");
-        // }
-        // else if (row - 1 >= 0 & spiralArray[Math.Max(0, row - 1), col] == 0)
-        // {
-        //     --row;
-        //     spiralArray[row, col] = order;
-        //     Console.Write($"order -> {order}. IV: row -> {row}, col -> {col}\n");
-        // }
-        // else break;
-        // Console.Write($"order -> {order}, row -> {row}, col -> {col}\n");
-        // break;
     }
+
     Show2dArray(spiralArray, "Спиральная матрица:");
 }
