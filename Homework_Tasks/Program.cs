@@ -26,7 +26,7 @@ int[] CreatRandom1DArray(int size, int minRnd, int maxRnd)
 }
 
 // Создание 2D-массива заполненных случайно сгенерированными числами (целыми или вещественными, на выбор)
-dynamic[,] CreatRandom2DArray(bool real = false, int oneSize = 1, int twoSize = 2, bool fill = true)
+dynamic[,] CreatRandom2DArray(bool real = false, bool fill = true, bool zero = false)
 {
     Console.Write("Введите число строк: ");
     int rows = Convert.ToInt32(Console.ReadLine());
@@ -48,6 +48,9 @@ dynamic[,] CreatRandom2DArray(bool real = false, int oneSize = 1, int twoSize = 
                 newArray[i, j] = !real ? new Random().Next(minValue, maxValue + 1) :
                                         minValue + (maxValue - minValue + 1) * new Random().NextDouble();
     }
+    else if (zero)
+        for (int i = 0; i < rows; i++) for (int j = 0; j < columns; j++) newArray[i, j] = 0;
+
     Console.WriteLine("");
     return newArray;
 }
@@ -295,16 +298,16 @@ while (true)
 26(1,0,1) 55(1,1,1)
 -------------------------------------------------------------------
 */
-int GetRandomUniq(int [,,] arr, int fromNumber, int toNumber)
+int GetRandomUniq(int[,,] arr, int fromNumber, int toNumber)
 {
     while (true)
     {
         int trial = new Random().Next(fromNumber, toNumber);
-        foreach(int el in arr) if (el == trial) break;
+        foreach (int el in arr) if (el == trial) break;
         return trial;
     }
-} 
-                
+}
+
 // Основное тело программы.
 Console.WriteLine("Задача-60. Формируем и выводим трехмерный массив из уникальных 2-х значных чисел");
 Console.WriteLine("---");
@@ -322,7 +325,7 @@ while (true)
         for (int j = 0; j < threeArr.GetLength(1); j++)
             for (int k = 0; k < threeArr.GetLength(2); k++)
             {
-                threeArr[i, j, k] = GetRandomUniq(threeArr, 10, 99); 
+                threeArr[i, j, k] = GetRandomUniq(threeArr, 10, 99);
                 Console.WriteLine($"{threeArr[i, j, k]} ({i},{j},{k})");
             }
 }
@@ -348,10 +351,67 @@ while (true)
     Console.Write("Продолжить (1- YES, 0 - NO): ");
     if (CheckExit(Convert.ToInt16(Console.ReadLine()))) break;
 
-    Console.Write("Укажите размер массива:");
-    int size = Convert.ToInt16(Console.ReadLine());
+    Console.WriteLine("Задайте размер массива ---------");
+    dynamic[,] spiralArray = CreatRandom2DArray(fill: false, zero: true);
+    Show2dArray(spiralArray, "Исходный массив:");
 
-    int[,] spiralArray = new int[size, size]; 
-    
+    int row = 0; int col = 0; int order = 1;
+    int sizeRow = spiralArray.GetLength(0);
+    int sizeCol = spiralArray.GetLength(1);
+    // отступы от краев при заполнении прямоугольников спирали
+    int indentRowUp = 0; int indentRowDn = 0; int indentColL = 0; int indentColR = 0;
+    while (order <= sizeRow*sizeCol)
+    {
+      Console.Write($"order -> {order}. row -> {row}, col -> {col}\n");
+      Console.Write($"indentRowUp -> {indentRowUp}. indentRowDn -> {indentRowDn}\n");
+      Console.Write($"indentColL -> {indentColL}. indentRowDn -> {indentColR}\n");
 
+       spiralArray[row, col] = order;
+       Show2dArray(spiralArray, "--------------");
+
+       if       (row == indentRowUp               & col < sizeCol - indentColR)     ++col;
+       else if  (col == sizeCol - indentColR - 1  & row < sizeRow - indentRowDn)    ++row;
+       else if  (row == sizeRow - indentRowDn - 1 & col > indentColL)               --col;
+       else                                                                         --row;
+
+       if (row == indentRowUp+1 & col == indentColL & indentColL != sizeCol - indentColR - 1)
+            ++indentRowUp; 
+            ++indentRowDn; 
+            ++indentColL; 
+            ++indentColR;
+
+       ++order;
+ 
+        // if (col + 1 < sizeCol & spiralArray[row, Math.Min(sizeCol - 1, col + 1)] == 0)
+        // {
+        //     ++col;
+        //     spiralArray[row, col] = order;
+// 
+        //     Console.Write($"order -> {order}. I: row -> {row}, col -> {col}\n");
+        //     Show2dArray(spiralArray, "col+1 < sizeCol:");
+        // }
+// 
+        // if (row + 1 < sizeRow & spiralArray[Math.Min(sizeRow - 1, row + 1), col] == 0)
+        // {
+        //     ++row;
+        //     spiralArray[row, col] = order;
+        //     Console.Write($"order -> {order}. II: row -> {row}, col -> {col}\n");
+        // }
+        // else if (col - 1 >= 0 & spiralArray[row, Math.Max(0, col - 1)] == 0)
+        // {
+        //     --col;
+        //     spiralArray[row, col] = order;
+        //     Console.Write($"order -> {order}. III: row -> {row}, col -> {col}\n");
+        // }
+        // else if (row - 1 >= 0 & spiralArray[Math.Max(0, row - 1), col] == 0)
+        // {
+        //     --row;
+        //     spiralArray[row, col] = order;
+        //     Console.Write($"order -> {order}. IV: row -> {row}, col -> {col}\n");
+        // }
+        // else break;
+        // Console.Write($"order -> {order}, row -> {row}, col -> {col}\n");
+        // break;
+    }
+    Show2dArray(spiralArray, "Спиральная матрица:");
 }
