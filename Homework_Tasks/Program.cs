@@ -357,9 +357,9 @@ while (true)
     int row = 0; int col = 0; int order = 1;
     int sizeRow = spiralArray.GetLength(0);
     int sizeCol = spiralArray.GetLength(1);
-    int indent = 0;                         // отступы от краев при заполнении прямоугольников спирали
+    int indent = 0;                         // отступы от краев массива при заполнении спирали
 
-    while (order <= sizeRow*sizeCol)
+    while (order <= sizeRow * sizeCol)
     {
        spiralArray[row, col] = order;
        if       (row == indent               & col < sizeCol - indent - 1)  ++col;
